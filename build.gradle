@@ -16,8 +16,9 @@ checkstyle {
 }
 
 spotbugs {
-  ignoreFailures = false
+  ignoreFailures = true
   showProgress = true
+  toolVersion = '4.0.6'
 }
 
 spotbugsMain {
@@ -38,7 +39,7 @@ spotbugsTest {
 
 pmd {
   toolVersion = "6.23.0"
-  ignoreFailures = false
+  ignoreFailures = true
 }
 
 pmdMain {
@@ -71,8 +72,12 @@ ext {
 }
 
 dependencies {
+  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+
   testImplementation "org.junit.jupiter:junit-jupiter-api:${junitV}"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitV}"
+
+  runtimeOnly "com.h2database:h2:1.4.200"
 }
 
 application {
