@@ -1,6 +1,6 @@
 package io.github.mkdev.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.github.mkdev.model.Role;
 import org.junit.jupiter.api.Assertions;
