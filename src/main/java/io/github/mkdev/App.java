@@ -1,23 +1,24 @@
 package io.github.mkdev;
 
+import io.github.mkdev.dao.H2RoleRepository;
+import io.github.mkdev.dao.Repository;
+import io.github.mkdev.database.H2ConnectionManager;
 import io.github.mkdev.model.Role;
-import io.github.mkdev.model.User;
-import io.github.mkdev.service.RoleService;
-import io.github.mkdev.service.UserService;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Optional;
 
+
+/**
+ * Input program method. Allow start project code.
+ */
 public class App {
 
-  /**
-   * Input program method. Allow start project code.
-   */
-  public static void main(String[] args) {
-    RoleService roleService = new RoleService();
-    UserService userService = new UserService();
-    Role adminRole = roleService.createAdminRole();
-    Role userRole = roleService.createUserRole();
-    User admin = userService.create("admin", adminRole);
-    User user = userService.create("user", userRole);
-    System.out.println("Create admin with name: " + admin.getName());
-    System.out.println("Create admin with name: " + user.getName());
+  public static void main(String[] args) throws SQLException {
+    H2ConnectionManager connectionManager = H2ConnectionManager.create();
+    Connection connection = connectionManager.getConnection();
+    Repository<Role> h2RoleRepository = new H2RoleRepository(connection);
+    Optional<Role> role = h2RoleRepository.save(new Role("ADMIN"));
+    System.out.println(role.get().getName());
   }
 }
