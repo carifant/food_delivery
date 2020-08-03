@@ -25,9 +25,9 @@ public class H2ConnectionManager {
   public static H2ConnectionManager create() throws SQLException {
 
 
-    String url =
-      "jdbc:h2:mem:delivery;"
+    String url = "jdbc:h2:mem:delivery;"
         + "INIT=RUNSCRIPT FROM 'classpath:init.sql'";
+    //"jdbc:h2:./test;" + "INIT=RUNSCRIPT FROM 'classpath:init.sql'";
     String user = "";
     String password = "";
 
@@ -40,7 +40,8 @@ public class H2ConnectionManager {
   }
 
 
-  private static Connection createConnection(String url, String user, String password) throws SQLException {
+  private static Connection createConnection(String url, String user, String password)
+      throws SQLException {
     return DriverManager.getConnection(url, user, password);
   }
 

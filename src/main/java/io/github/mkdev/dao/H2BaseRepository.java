@@ -32,8 +32,8 @@ public class H2BaseRepository {
 
 
     String[] returnedAttributes = {"id"};
-    try (PreparedStatement insertStatement = connection
-      .prepareStatement(insertQuery, returnedAttributes)) {
+    try (PreparedStatement insertStatement
+           = connection.prepareStatement(insertQuery, returnedAttributes)) {
       int rows = insertStatement.executeUpdate();
       if (rows == 0) {
         throw new SQLException("Failed of insertion");
@@ -60,15 +60,14 @@ public class H2BaseRepository {
    * @return {@link java.util.HashMap} with k/v table representation
    * @throws SQLException if can't retrieve field.
    */
-  public HashMap<String, String> selectAllFieldsByTableNameAndId(String tableName, String id)
-    throws SQLException {
+
+  public HashMap<String, String> selectAllFieldsByTableNameAndId(String tableName,
+                                                                 String id) throws SQLException {
     HashMap<String, String> result = new HashMap<>();
     Statement statementx = connection.createStatement();
-    ResultSet selectStatement = statementx.executeQuery(
-      "SELECT * FROM "
-        + tableName.toUpperCase(Locale.ENGLISH)
-        + " WHERE ID = '" + id + "';"
-    );
+    ResultSet selectStatement = statementx.executeQuery("SELECT * " + "FROM "
+        + tableName.toUpperCase(
+        Locale.ENGLISH) + " WHERE ID = '" + id + "';");
     while (selectStatement.next()) {
       Class<?> cls = Role.class;
       Field[] fieldlist = cls.getDeclaredFields();
@@ -79,42 +78,61 @@ public class H2BaseRepository {
     return result;
   }
 
+  /**
+   * Update program method. Allow to change the date.
+   */
+
   public void update(String tableName, String nameOfColumn, String newDate, String id)
-    throws SQLException {
+      throws SQLException {
     Statement statementx = connection.createStatement();
     statementx.executeUpdate(
-      "UPDATE " + tableName.toUpperCase(Locale.ENGLISH) + " SET " + nameOfColumn + " = " + newDate
+        "UPDATE " + tableName.toUpperCase(Locale.ENGLISH) + " SET " + nameOfColumn + " = " + newDate
         + " WHERE ID ='" + id + "';"
     );
   }
 
+  /**
+   * Delete program method. Allow to delit the date.
+   */
+
   public void delete(String tableName, String nameOfColumn, String id)
-    throws SQLException {
+      throws SQLException {
     Statement statementx = connection.createStatement();
     statementx.executeUpdate("DELETE FROM " + tableName.toUpperCase(Locale.ENGLISH) + " "
-      + nameOfColumn + " WHERE ID ='" + id + "';"
+        + nameOfColumn + " WHERE ID ='" + id + "';"
     );
   }
 
+  /**
+   * Selecte program method. Allow to select the date.
+   */
+
   public Map<String, String> selectAll(String tableName)
-    throws SQLException {
+      throws SQLException {
     Map<String, String> map = new HashMap<>();
     Statement statementx = connection.createStatement();
     ResultSet rs =
-      statementx.executeQuery("SELECT * FROM " + tableName.toUpperCase(Locale.ENGLISH));
+        statementx.executeQuery("SELECT * FROM " + tableName.toUpperCase(Locale.ENGLISH));
     while (rs.next()) {
       map.put(rs.getString(1), rs.getString(2));
+      map.put(rs.getString(3), rs.getString(4));
+      map.put(rs.getString(5), rs.getString(6));
     }
     return map;
   }
 
+  /**
+   * SelectID program method. Allow to get the ID.
+   */
+
   public String selectID(String tableName, String tableColumn, String query)
-    throws SQLException {
+      throws SQLException {
 
     Statement statementx = connection.createStatement();
     ResultSet rs = statementx.executeQuery(
-      "SELECT id FROM " + tableName.toUpperCase(Locale.ENGLISH) + " WHERE " + tableColumn + " = '" +
-        query + "'");
+        "SELECT id FROM " + tableName.toUpperCase(Locale.ENGLISH)
+        + " WHERE " + tableColumn + " = '"
+        + query + "'");
     String result = null;
     if (rs.next()) {
       result = rs.getString(1);

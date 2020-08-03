@@ -33,6 +33,10 @@ public class H2RoleRepository extends H2BaseRepository implements Repository<Rol
     return dbRole;
   }
 
+  /**
+   * Update program method. Allow to change the date.
+   */
+
   public void updateRole(String newName, String id) {
     try {
       this.update("ROLE", "name", newName, id);
@@ -41,11 +45,15 @@ public class H2RoleRepository extends H2BaseRepository implements Repository<Rol
     }
   }
 
-  public void deleteRole(String id) {
+  /**
+   * Delete program method. Allow to delete the date.
+   */
+
+  public void deleteRole(Role role) {
     try {
+      String id = this.selectID("role", "name", role.getName());
       this.delete("ROLE", "name", id);
     } catch (SQLException e) {
-      System.out.println("Данного объекта не существует");
       e.printStackTrace();
     } catch (NullPointerException x) {
       x.printStackTrace();
@@ -53,11 +61,16 @@ public class H2RoleRepository extends H2BaseRepository implements Repository<Rol
     }
   }
 
+  /**
+   * Select program method. Allow to get the date.
+   */
+
   public Optional<Role> selectNameAndIdRole(Role role) {
     Optional<Role> dbRole = Optional.empty();
     try {
       HashMap<String, String> roleHash =
-        this.selectAllFieldsByTableNameAndId("ROLE", role.getId().toString());
+          this.selectAllFieldsByTableNameAndId("ROLE", this.selectID(
+            "role", "name", role.getName()));
       dbRole = Optional.of(new Role(
         UUID.fromString(roleHash.get("id")),
         roleHash.get("name")

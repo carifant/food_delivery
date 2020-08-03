@@ -1,7 +1,9 @@
 package io.github.mkdev.dao;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import io.github.mkdev.database.H2ConnectionManager;
 import java.sql.Connection;
@@ -46,12 +48,12 @@ class H2BaseRepositoryTest {
 
 
   @Test
-  public void whenSelectIDIsWork() {
+  public void whenSelectIdIsWork() {
     try {
       H2BaseRepository h2BaseRepository = init();
-     String exp =  h2BaseRepository.insert("INSERT INTO ROLE(NAME) VALUES ('User7')");
-     String id =  h2BaseRepository.selectID("role", "name", "User7");
-     assertEquals(exp, id);
+      String exp = h2BaseRepository.insert("INSERT INTO ROLE(NAME) VALUES ('User7')");
+      String id = h2BaseRepository.selectID("role", "name", "User7");
+      assertEquals(exp, id);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -63,7 +65,7 @@ class H2BaseRepositoryTest {
       H2BaseRepository h2BaseRepository = init();
       h2BaseRepository.insert("INSERT INTO ROLE(NAME) VALUES ('User6')");
       Map<String, String> map = h2BaseRepository.selectAll("role");
-      int size = 1;
+      int size = 2;
       assertEquals(size, map.size());
     } catch (SQLException e) {
       e.printStackTrace();

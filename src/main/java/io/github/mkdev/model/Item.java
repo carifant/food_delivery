@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class Item {
-  private final UUID id;
+  private UUID id;
   private String name;
   private String description;
   private Market market;
@@ -14,7 +14,18 @@ public class Item {
    * Create {@link io.github.mkdev.model.Item} object with required fields.
    */
   public Item(String name, String description, Market market, BigDecimal price) {
-    this.id = UUID.randomUUID();
+    this.name = name;
+    this.description = description;
+    this.market = market;
+    this.price = price;
+  }
+
+  /**
+   * Create {@link io.github.mkdev.model.Item} object with required fields.
+   */
+
+  public Item(UUID id, String name, String description, Market market, BigDecimal price) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.market = market;
