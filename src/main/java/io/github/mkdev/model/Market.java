@@ -3,15 +3,26 @@ package io.github.mkdev.model;
 import java.util.UUID;
 
 public class Market {
-  private final UUID id;
+  private  UUID id;
   private String name;
   private User owner;
 
   /**
    * Create {@link io.github.mkdev.model.Market} object with required fields.
    */
+
+
+  public Market(UUID id, String name, User owner) {
+    this.id = id;
+    this.name = name;
+    this.owner = owner;
+  }
+
+  public Market(String name) {
+    this.name = name;
+  }
+
   public Market(String name, User owner) {
-    this.id = UUID.randomUUID();
     this.name = name;
     this.owner = owner;
   }

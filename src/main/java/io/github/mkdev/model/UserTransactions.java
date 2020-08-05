@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class UserTransactions {
-  private final UUID id;
+  private UUID id;
   private User user;
   private Item item;
   private Integer count;
@@ -14,8 +14,20 @@ public class UserTransactions {
   /**
    * Create {@link io.github.mkdev.model.UserTransactions} object with required fields.
    */
+  public UserTransactions(UUID id, User user, Item item, Integer count, BigDecimal price) {
+    this.id = id;
+    this.user = user;
+    this.item = item;
+    this.count = count;
+    this.price = price;
+    this.total = this.price.multiply(BigDecimal.valueOf(this.count));
+  }
+
+  /**
+   * Create {@link io.github.mkdev.model.Item} object with required fields.
+   */
+
   public UserTransactions(User user, Item item, Integer count, BigDecimal price) {
-    this.id = UUID.randomUUID();
     this.user = user;
     this.item = item;
     this.count = count;
