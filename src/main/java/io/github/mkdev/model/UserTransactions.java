@@ -2,18 +2,43 @@ package io.github.mkdev.model;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "user_transaction")
 public class UserTransactions {
+  @Id
+  @GeneratedValue
+  @Column(name = "ID")
   private UUID id;
+  @ManyToOne(optional = false, cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id")
   private User user;
+  @OneToOne(optional = false, cascade = CascadeType.ALL)
+  @JoinColumn(name = "item_id")
   private Item item;
+  @Column(name = "count")
   private Integer count;
+  @Column(name = "price")
   private BigDecimal price;
+  @Column(name = "total")
   private BigDecimal total;
+
+  public UserTransactions() {
+  }
 
   /**
    * Create {@link io.github.mkdev.model.UserTransactions} object with required fields.
    */
+
   public UserTransactions(UUID id, User user, Item item, Integer count, BigDecimal price) {
     this.id = id;
     this.user = user;
@@ -33,6 +58,18 @@ public class UserTransactions {
     this.count = count;
     this.price = price;
     this.total = this.price.multiply(BigDecimal.valueOf(this.count));
+  }
+
+  @Override
+  public String toString() {
+    return "UserTransactions{"
+      + "id=" + id
+      + ", user=" + user
+      + ", item=" + item
+      + ", count=" + count
+      + ", price=" + price
+      + ", total=" + total
+      + '}';
   }
 
   public UUID getId() {
