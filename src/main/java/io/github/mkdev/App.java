@@ -1,27 +1,25 @@
 package io.github.mkdev;
 
-import io.github.mkdev.database.HibernateUtil;
+import io.github.mkdev.database.HibernateUtilXml;
 import io.github.mkdev.model.Item;
 import io.github.mkdev.model.Market;
 import io.github.mkdev.model.Role;
 import io.github.mkdev.model.User;
 import io.github.mkdev.model.UserTransactions;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 
 public class App {
 
   /**
    * Input program method. Allow start project code.
    */
-  public static void main(String[] args) throws SQLException {
+  public static void main(String[] args) {
 
-    Transaction transaction = null;
-    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+    Transaction transaction;
+    try (Session session = HibernateUtilXml.getSessionFactory().openSession()) {
       transaction = session.beginTransaction();
 
       Role role = new Role("ADMIN");
@@ -41,12 +39,8 @@ public class App {
       System.out.println(fromDB);
 
     } catch (Exception e) {
-      if (transaction != null) {
-        transaction.rollback();
-      }
       e.printStackTrace();
     }
-
-    HibernateUtil.shutdown();
   }
 }
+
