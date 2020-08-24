@@ -1,81 +1,43 @@
 package io.github.mkdev.dao;
 
 import io.github.mkdev.model.Item;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Optional;
-import java.util.UUID;
 
-public class H2ItemRepository extends H2BaseRepository implements Repository<Item> {
-
-  public H2ItemRepository(Connection connection) {
-    super(connection);
-  }
+public class H2ItemRepository extends HibernateBaseRepository implements Repository<Item> {
 
   @Override
   public Optional<Item> save(Item item) {
-    Optional<Item> dbItem = Optional.empty();
-    String query =
-        "INSERT INTO ITEMS(NAME, DESCRIPTION, MARKET_ID, PRICE) VALUES ( '" + item.getName()
-          + "', '" + item.getDescription() + "', '" + item.getMarket().getId() + "', '"
-          + item.getPrice() + "');";
-    try {
-      String id = this.insert(query);
-      HashMap<String, String> itemHash = this.selectAllFieldsByTableNameAndId("ITEMS", id);
-      dbItem = Optional.of(new Item(
-        UUID.fromString(itemHash.get("id")),
-        itemHash.get("name"), itemHash.get("description"), item.getMarket(), item.getPrice()
-      ));
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
-    }
-    return dbItem;
+    create(item);
+    return selectNameAndIdItem(item);
   }
 
   /**
    * Update program method. Allow to change the date.
    */
 
-  public void updateItem(String newName, String id, String nameOfColumn) {
-    try {
-      this.update("Items", nameOfColumn, newName, id);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
+  public void updateItem(String newValue, String oldValue) {
+    update("Item", "name", newValue, oldValue);
   }
 
   /**
-   * Delete program method. Allow to delite the date.
+   * Delete program method. Allow to delete the date.
    */
 
-  public void deleteItem(Item item) {
-    try {
-      String id = this.selectID("items", "name", item.getName());
-      this.delete("items", "name", id);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } catch (NullPointerException x) {
-      x.printStackTrace();
-      System.out.println("Данного объекта не существует");
-    }
+  public void deleteItem(String oldValue) {
+    delete("Item", "name", oldValue);
   }
 
   /**
-   * Select program method. Allow to get name and id.
+   * Select program method. Allow to get the date.
    */
 
   public Optional<Item> selectNameAndIdItem(Item item) {
     Optional<Item> dbItem = Optional.empty();
     try {
-      HashMap<String, String> itemHash = this
-          .selectAllFieldsByTableNameAndId("items", this.selectID("items",
-          "name", item.getName()));
-      dbItem = Optional.of(new Item(
-        UUID.fromString(itemHash.get("id")),
-        itemHash.get("name"), itemHash.get("description"), item.getMarket(), item.getPrice()
-      ));
-    } catch (SQLException e) {
+      Item result = (Item) read("Item", "id", item.getId());
+      dbItem = Optional.of(new Item(result.getId(),
+        result.getName(), result.getDescription(), result.getMarket(), result.getPrice()));
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return dbItem;
